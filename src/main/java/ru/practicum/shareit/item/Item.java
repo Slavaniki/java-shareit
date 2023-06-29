@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item.dto;
+package ru.practicum.shareit.item;
 
 import lombok.Builder;
 import lombok.Data;
@@ -7,11 +7,11 @@ import ru.practicum.shareit.user.User;
 
 @Data
 @Builder
-public class ItemDto {
+public class Item {
     private Integer id;
     private String name;
     private User owner;
     private String description;
     private boolean available;
-    private Integer request;
+    private ItemRequest request;
 }
