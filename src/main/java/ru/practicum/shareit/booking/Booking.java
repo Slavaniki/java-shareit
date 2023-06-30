@@ -13,6 +13,6 @@ public class Booking {
     private LocalDateTime start;
     private LocalDateTime end;
     private Item item;
-    private User booker;
+    private Integer booker;
     private Status status;
 }

@@ -13,5 +13,5 @@ public class Item {
     private User owner;
     private String description;
     private boolean available;
-    private ItemRequest request;
+    private Integer request;
 }

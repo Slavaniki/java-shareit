@@ -10,7 +10,18 @@ public class ItemMapper {
                 .owner(item.getOwner())
                 .available(item.isAvailable())
                 .description(item.getDescription())
-                .request(item.getRequest() != null ? item.getRequest().getId() : null)
+                .request(item.getRequest())
+                .build();
+    }
+
+    public static Item toItem(ItemDto itemDto) {
+        return Item.builder()
+                .id(itemDto.getId())
+                .name(itemDto.getName())
+                .owner(itemDto.getOwner())
+                .available(itemDto.isAvailable())
+                .description(itemDto.getDescription())
+                .request(itemDto.getRequest())
                 .build();
     }
 }
