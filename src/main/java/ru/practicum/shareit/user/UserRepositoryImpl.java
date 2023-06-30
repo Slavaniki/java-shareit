@@ -2,8 +2,8 @@ package ru.practicum.shareit.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.exception.DuplicateEmailException;
-import ru.practicum.shareit.exception.SubstanceNotFoundException;
+import ru.practicum.shareit.exception.EmailAlreadyExistException;
+import ru.practicum.shareit.exception.ResourceNotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 
 import java.util.*;
@@ -20,7 +20,7 @@ public class UserRepositoryImpl implements UserRepository {
         checkEmail(null, email);
         user.setId(id++);
         users.put(user.getId(), user);
-        log.info("User with id {} is added to database.", user.getId());
+        log.info("Добавление пользователя с id: " + user.getId());
         return user;
     }
 
@@ -34,13 +34,13 @@ public class UserRepositoryImpl implements UserRepository {
         if (user != null) {
             users.values().forEach(u -> {
                 if (u.getEmail().equals(email) && !user.getEmail().equals(email)) {
-                    throw new DuplicateEmailException(email);
+                    throw new EmailAlreadyExistException(email);
                 }
             });
         } else {
             users.values().forEach(u -> {
                 if (u.getEmail().equals(email)) {
-                    throw new DuplicateEmailException(email);
+                    throw new EmailAlreadyExistException(email);
                 }
             });
         }
@@ -53,9 +53,9 @@ public class UserRepositoryImpl implements UserRepository {
             final String email = user.getEmail();
             checkEmail(oldUser, email);
             users.replace(user.getId(), user);
-            log.info("User with id {} is updated to database.", user.getId());
+            log.info("Обновление пользователя с id: " + user.getId());
         } else {
-            throw new SubstanceNotFoundException(String.format("User with id %d isn't exist", user.getId()));
+            throw new ResourceNotFoundException(String.format("Пользователя с id: " + user.getId() + " не существует"));
         }
         return user;
     }
@@ -65,9 +65,9 @@ public class UserRepositoryImpl implements UserRepository {
         if (users.containsKey(userId)) {
             final User userToDelete = getUser(userId);
             users.remove(userToDelete.getId());
-            log.info("User with id {} is deleted from database.", userId);
+            log.info("Удаление пользователя с id: " + userId);
         } else {
-            throw new SubstanceNotFoundException(String.format("There isn't user with id %d", userId));
+            throw new ResourceNotFoundException(String.format("Пользователя с id: " + userId + " не существует"));
         }
     }
 
@@ -76,7 +76,7 @@ public class UserRepositoryImpl implements UserRepository {
         if (users.containsKey(userId)) {
             return users.get(userId);
         } else {
-            throw new SubstanceNotFoundException(String.format("There isn't user with id %d.", userId));
+            throw new ResourceNotFoundException(String.format("Пользователя с id: " + userId + " не существует"));
         }
     }
 

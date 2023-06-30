@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
-    @ExceptionHandler(SubstanceNotFoundException.class)
+    @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundCases(RuntimeException e) {
         log.error("404 {}", e.getMessage(), e);
         return new ErrorResponse("Object not found", e.getMessage());
     }
 
-    @ExceptionHandler(DuplicateEmailException.class)
+    @ExceptionHandler(EmailAlreadyExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleDuplicateEmailCases(RuntimeException e) {
         log.error("409 {}", e.getMessage(), e);
