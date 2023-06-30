@@ -10,7 +10,6 @@ import java.util.Collection;
 
 @Service
 @Slf4j
-@Component("ItemServiceImpl")
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
     @Override

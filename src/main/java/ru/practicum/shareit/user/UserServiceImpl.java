@@ -3,83 +3,47 @@ package ru.practicum.shareit.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import ru.practicum.shareit.user.dto.UserDto;
 
-import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-@Component("UserServiceImpl")
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    @Override
-    public User createUser(User user) {
-        return null;
-    }
 
-    @Override
-    public User updateUser(User user) {
-        return null;
-    }
-
-    @Override
-    public void deleteUser(Integer id) {
-
-    }
-
-    @Override
-    public Collection<User> getAllUsers() {
-        return null;
-    }
-
-    @Override
-    public User getUserById(Integer id) {
-        return null;
-    }
-    /*@Autowired
+    @Autowired
     private UserRepository userRepository;
 
     @Override
-    public User createUser(User user) {
-        return userRepository.add(user);
+    public UserDto createUser(UserDto userDto) {
+        User user = UserMapper.toUser(userDto);
+        User newUser = userRepository.createUser(user);
+        return UserMapper.toUserDto(newUser);
     }
 
     @Override
-    public User updateUser(User user) {
-        if (contains(user.getId())) {
-            return userRepository.update(user).get();
-        }
-        log.info("User с id " + user.getId() + " не найден");
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    public UserDto updateUser(UserDto userDto, Long id) {
+        User user = userRepository.getUser(id);
+        User newUser = user.update(userDto);
+        return UserMapper.toUserDto(userRepository.updateUser(newUser));
     }
 
     @Override
-    public void deleteUser(Integer id) {
-        if (contains(id)) {
-            userRepository.delete(id);
-        } else {
-            log.info("User с id " + id + " не найден");
-        }
+    public void deleteUser(Long id) {
+        userRepository.deleteUser(id);
     }
 
     @Override
-    public Collection<User> getAllUsers() {
-        return userRepository.getAll();
+    public List<UserDto> getAllUsers() {
+        return userRepository.getAllUsers().stream().map(UserMapper::toUserDto).collect(Collectors.toList());
     }
 
     @Override
-    public User getUserById(Integer id) {
-        if (contains(id)) {
-            return userRepository.getById(id).get();
-        }
-        log.info("User с id " + id + " не найден");
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    public UserDto getUserById(Long id) {
+        User user = userRepository.getUser(id);
+        return UserMapper.toUserDto(user);
     }
-
-    private boolean contains(Integer id) {
-        return userRepository.getUsersMap().containsKey(id);
-    }*/
 }
