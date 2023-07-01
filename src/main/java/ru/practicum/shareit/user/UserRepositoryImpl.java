@@ -55,7 +55,7 @@ public class UserRepositoryImpl implements UserRepository {
             users.replace(user.getId(), user);
             log.info("Обновление пользователя с id: " + user.getId());
         } else {
-            throw new ResourceNotFoundException(String.format("Пользователя с id: " + user.getId() + " не существует"));
+            throw new ResourceNotFoundException("Пользователя с id: " + user.getId() + " не существует");
         }
         return user;
     }
@@ -67,7 +67,7 @@ public class UserRepositoryImpl implements UserRepository {
             users.remove(userToDelete.getId());
             log.info("Удаление пользователя с id: " + userId);
         } else {
-            throw new ResourceNotFoundException(String.format("Пользователя с id: " + userId + " не существует"));
+            throw new ResourceNotFoundException("Пользователя с id: " + userId + " не существует");
         }
     }
 
@@ -76,7 +76,7 @@ public class UserRepositoryImpl implements UserRepository {
         if (users.containsKey(userId)) {
             return users.get(userId);
         } else {
-            throw new ResourceNotFoundException(String.format("Пользователя с id: " + userId + " не существует"));
+            throw new ResourceNotFoundException("Пользователя с id: " + userId + " не существует");
         }
     }
 

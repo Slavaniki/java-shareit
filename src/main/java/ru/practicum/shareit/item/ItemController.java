@@ -15,31 +15,31 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping
-    public Item createItem(@RequestBody ItemDto item, @RequestHeader("X-Sharer-User-Id") Integer ownerId) {
+    public ItemDto createItem(@RequestBody ItemDto item, @RequestHeader("X-Sharer-User-Id") Long ownerId) {
         log.info("Добавление новой вещи");
         return itemService.createItem(item, ownerId);
     }
 
-    @PatchMapping("/{itemId}")
-    public Item updateItemById(@PathVariable Integer id, @RequestHeader("X-Sharer-User-Id") Integer userId) {
+    @PatchMapping("/{id}")
+    public ItemDto updateItemById(@PathVariable Long id, @RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody ItemDto item) {
         log.info("Обновление вещи по id:" + id);
-        return itemService.updateItemById(id, userId);
+        return itemService.updateItemById(id, userId, item);
     }
 
-    @GetMapping("/{itemId}")
-    public Item getItemById(@PathVariable Integer id) {
+    @GetMapping("/{id}")
+    public ItemDto getItemById(@PathVariable Long id) {
         log.info("Получение вещи по id:" + id);
         return itemService.getItemById(id);
     }
 
     @GetMapping
-    public Collection<Item> getAllItemsOfUser(@RequestHeader("X-Sharer-User-Id") Integer ownerId) {
+    public Collection<ItemDto> getAllItemsOfUser(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
         log.info("Получение всех вещей пользователя по id: " + ownerId);
         return itemService.getAllItemsOfUser(ownerId);
     }
 
     @GetMapping("/search")
-    public Collection<Item> getAllItemsBySearch(@RequestParam("text") String text, @RequestHeader("X-Sharer-User-Id") Integer userId) {
+    public Collection<ItemDto> getAllItemsBySearch(@RequestParam("text") String text, @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("Поиск всех вещей по запросу: \"" + text + "\"");
         return itemService.getAllItemsBySearch(text, userId);
     }

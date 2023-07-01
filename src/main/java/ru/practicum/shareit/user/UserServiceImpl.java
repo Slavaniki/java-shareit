@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
     @Autowired
     private UserRepository userRepository;
 
