@@ -3,7 +3,6 @@ package ru.practicum.shareit.item;
 import lombok.Builder;
 import lombok.Data;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.user.User;
 
 @Data
 @Builder
@@ -16,14 +15,14 @@ public class Item {
     private Long request;
 
     public Item update(ItemDto itemDto) {
-        if (itemDto.getName() != null) {
-            itemDto.setName(itemDto.getName());
+        if (itemDto.getName() == null) {
+            itemDto.setName(name);
         }
-        if (itemDto.getDescription() != null) {
-            itemDto.setDescription(itemDto.getDescription());
+        if (itemDto.getDescription() == null) {
+            itemDto.setDescription(description);
         }
-        if (itemDto.getAvailable() != null) {
-            itemDto.setAvailable(itemDto.getAvailable());
+        if (itemDto.getAvailable() == null) {
+            itemDto.setAvailable(available);
         }
         return Item.builder()
                 .id(id)

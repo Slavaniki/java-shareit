@@ -16,7 +16,6 @@ public class ItemMapper {
 
     public static Item toItem(ItemDto itemDto) {
         return Item.builder()
-                .id(itemDto.getId())
                 .name(itemDto.getName())
                 .owner(itemDto.getOwner())
                 .available(itemDto.getAvailable())

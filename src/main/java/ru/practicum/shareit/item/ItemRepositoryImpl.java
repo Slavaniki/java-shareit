@@ -6,10 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.ResourceNotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Data
 @Component
@@ -28,7 +25,7 @@ public class ItemRepositoryImpl implements ItemRepository {
             throw new ValidationException("Описание не может быть пустым");
         }
         if (item.getAvailable() == null) {
-            throw new ValidationException("Описание не может быть пустым");
+            throw new ValidationException("Доступность не может быть пустой");
         }
         Long itemId = id++;
         item.setId(itemId);
@@ -66,11 +63,33 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Collection<Item> getAllItemsOfUser(Long ownerId) {
-        return null;
+        if (ownersItems.containsKey(ownerId)) {
+            Collection<Item> resItems = new ArrayList<>();
+            for (Long id : ownersItems.get(ownerId)) {
+                resItems.add(getItemById(id));
+            }
+            log.info("Получение вещей у пользователя с id: " + ownerId);
+            return resItems;
+        } else {
+            throw new ResourceNotFoundException("У пользователя с id: " + ownerId + " нет вещей");
+        }
     }
 
     @Override
     public Collection<Item> getAllItemsBySearch(String text, Long userId) {
-        return null;
+        String findText = text.toLowerCase().trim();
+        Collection<Item> resItems = new ArrayList<>();
+        if (!findText.isEmpty()) {
+            items.values().forEach(item -> {
+                if (item.getAvailable() == true) {
+                    if ((item.getName().toLowerCase().contains(findText)
+                                || item.getDescription().toLowerCase().contains(findText))) {
+                        resItems.add(item);
+                    }
+                }
+            });
+        }
+
+        return resItems;
     }
 }
