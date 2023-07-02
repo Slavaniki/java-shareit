@@ -33,7 +33,7 @@ public class ItemServiceImpl implements ItemService {
         if (userRepository.getUser(userId) != null) {
             Collection<Item> itemById = new ArrayList<>();
             itemRepository.getAllItemsOfUser(userId).forEach(item -> {
-                if (item.getId() == id) {
+                if (item.getId().equals(id)) {
                     itemById.add(item);
                 }
             });
