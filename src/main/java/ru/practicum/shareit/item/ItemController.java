@@ -13,15 +13,16 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemService itemService;
+    private final String userIdHeader = "X-Sharer-User-Id";
 
     @PostMapping
-    public ItemDto createItem(@RequestBody ItemDto item, @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+    public ItemDto createItem(@RequestBody ItemDto item, @RequestHeader(userIdHeader) Long ownerId) {
         log.info("Добавление новой вещи");
         return itemService.createItem(item, ownerId);
     }
 
     @PatchMapping("/{id}")
-    public ItemDto updateItemById(@PathVariable Long id, @RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody ItemDto item) {
+    public ItemDto updateItemById(@PathVariable Long id, @RequestHeader(userIdHeader) Long userId, @RequestBody ItemDto item) {
         log.info("Обновление вещи по id:" + id);
         return itemService.updateItemById(id, userId, item);
     }
@@ -33,13 +34,13 @@ public class ItemController {
     }
 
     @GetMapping
-    public Collection<ItemDto> getAllItemsOfUser(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
+    public Collection<ItemDto> getAllItemsOfUser(@RequestHeader(userIdHeader) Long ownerId) {
         log.info("Получение всех вещей пользователя по id: " + ownerId);
         return itemService.getAllItemsOfUser(ownerId);
     }
 
     @GetMapping("/search")
-    public Collection<ItemDto> getAllItemsBySearch(@RequestParam("text") String text, @RequestHeader("X-Sharer-User-Id") Long userId) {
+    public Collection<ItemDto> getAllItemsBySearch(@RequestParam("text") String text, @RequestHeader(userIdHeader) Long userId) {
         log.info("Поиск всех вещей по запросу: \"" + text + "\"");
         return itemService.getAllItemsBySearch(text, userId);
     }
