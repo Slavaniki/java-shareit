@@ -1,15 +1,22 @@
 package ru.practicum.shareit.request.dto;
 
-import lombok.Builder;
-import lombok.Data;
-import ru.practicum.shareit.user.User;
+import lombok.*;
+import ru.practicum.shareit.Create;
+import ru.practicum.shareit.user.dto.UserDto;
+
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-@Data
-@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ItemRequestDto {
-    private Integer id;
+    private long id;
+    @Size(max = 200,
+            message = "Описание не может быть длиннее 200 символов",
+            groups = {Create.class})
     private String description;
-    private User requestor;
+    private UserDto requester;
     private LocalDateTime created;
 }
