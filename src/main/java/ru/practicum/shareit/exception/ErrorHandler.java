@@ -24,7 +24,7 @@ public class ErrorHandler {
         log.error("400 {}", e.getMessage(), e);
         return new ErrorResponse("Unknown state: UNSUPPORTED_STATUS");
     }
-    
+
     @ExceptionHandler({ResourceNotFoundException.class, ResourceNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundCases(RuntimeException e) {
