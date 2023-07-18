@@ -13,9 +13,10 @@ import ru.practicum.shareit.user.service.UserMapper;
 
 import java.util.List;
 
-@Data
-@Component
-public class ItemMapper {
+public final class ItemMapper {
+    private ItemMapper() {
+    }
+
     public static ItemDto itemToDto(Item item) {
         return new ItemDto(
                 item.getId(),

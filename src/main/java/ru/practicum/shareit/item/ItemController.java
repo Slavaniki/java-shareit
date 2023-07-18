@@ -20,17 +20,17 @@ import java.util.List;
 @Slf4j
 public class ItemController {
     private final ItemService itemService;
-    private final String userIdHeader = "X-Sharer-User-Id";
+    private static final String USER_ID_HEADER = "X-Sharer-User-Id";
 
     @PostMapping
-    public ItemDto createItem(@RequestHeader(userIdHeader) Long userId,
+    public ItemDto createItem(@RequestHeader(USER_ID_HEADER) Long userId,
                        @Validated({Create.class}) @RequestBody ItemDto itemDto) {
         log.info("Запрос на добавление вещи " + itemDto + " от пользователя с id " + userId);
         return itemService.createItem(userId, itemDto);
     }
 
     @PostMapping("/{itemId}/comment")
-    public CommentDto addComment(@RequestHeader(userIdHeader) Long userId,
+    public CommentDto addComment(@RequestHeader(USER_ID_HEADER) Long userId,
                                  @PathVariable Long itemId,
                                  @Valid @RequestBody CommentDto commentDto) {
         log.info("Запрос на добавление отзыва от пользователя с id " + userId + " на вещь с id " + itemId);
@@ -38,21 +38,21 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ItemDtoWithBookingsAndComments getItem(@RequestHeader(userIdHeader) Long id,
+    public ItemDtoWithBookingsAndComments getItem(@RequestHeader(USER_ID_HEADER) Long id,
             @PathVariable Long itemId) {
         log.info("Запрос на получение вещи с id " + itemId);
         return itemService.getItemDtoWithBookingsAndComments(id, itemId);
     }
 
     @GetMapping
-    public List<ItemDtoWithBookingsAndComments> getAllItemsByUser(@RequestHeader(userIdHeader) Long userId) {
+    public List<ItemDtoWithBookingsAndComments> getAllItemsByUser(@RequestHeader(USER_ID_HEADER) Long userId) {
         log.info("Запрос на получение всех вещей пользователя с id " + userId);
         return itemService.getAllItemsOfUser(userId);
     }
 
     @PatchMapping("/{itemId}")
     public ItemDto updateItem(
-            @RequestHeader(userIdHeader) Long ownerId,
+            @RequestHeader(USER_ID_HEADER) Long ownerId,
             @PathVariable Long itemId,
             @Validated({Update.class}) @RequestBody ItemDto itemDto) {
         log.info("Запрос на обновление вещи с id " + itemId + " от пользователя с id " + ownerId);
@@ -61,7 +61,7 @@ public class ItemController {
 
     @DeleteMapping("/{itemId}")
     public void deleteItem(
-            @RequestHeader(userIdHeader) Long ownerId,
+            @RequestHeader(USER_ID_HEADER) Long ownerId,
             @PathVariable Long itemId) {
         log.info("Запрос на удаление вещи с id " + itemId + " от пользователя с id " + ownerId);
         itemService.deleteItemById(ownerId, itemId);

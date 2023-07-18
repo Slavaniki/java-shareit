@@ -16,26 +16,16 @@ import java.util.Set;
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> getBookingsByItem_IdInOrderByEndAsc(Set<Long> itemIds);
 
-    @Query(value = "SELECT b FROM Booking AS b " +
-            "WHERE b.item.owner.id = :id")
-    List<Booking> getBookingsByOwnerId(Long id, Sort sort);
+    List<Booking> findBookingsByItemOwnerId(Long id, Sort sort);
 
-    @Query(value = "SELECT b FROM Booking AS b " +
-            "WHERE b.item.owner.id = :id AND b.status = :status")
-    List<Booking> getBookingsByUserItemsWithState(long id, BookingStatus status, Sort sort);
+    List<Booking> findBookingsByItemOwnerIdAndStatus(Long id, BookingStatus status, Sort sort);
 
-    @Query(value = "SELECT b FROM Booking AS b " +
-            "WHERE b.item.owner.id = :id " +
-            "AND b.start < current_timestamp AND b.end > current_timestamp ")
-    List<Booking> getBookingsByOwnerIdCurrent(long id, Sort sort);
+    List<Booking> findBookingsByItemOwnerIdAndStartBeforeAndEndAfter(Long id, Sort sort, LocalDateTime startDateTime,
+                                                                     LocalDateTime endDateTime);
 
-    @Query(value = "SELECT b FROM Booking AS b " +
-            "WHERE b.item.owner.id = :id AND b.end < current_timestamp")
-    List<Booking> getBookingsByOwnerIdPast(long id, Sort sort);
+    List<Booking> findBookingsByItemOwnerIdAndEndBefore(Long id, Sort sort, LocalDateTime endDateTime);
 
-    @Query(value = "SELECT b FROM Booking AS b " +
-            "WHERE b.item.owner.id = :id AND b.start > current_date")
-    List<Booking> getBookingsByOwnerIdFuture(long id, Sort sort);
+    List<Booking> findBookingsByItemOwnerIdAndStartAfter(Long id, Sort sort, LocalDateTime startDateTime);
 
     @Query(value = "SELECT * FROM bookings " +
             "WHERE item_id = ? AND start_date < now() " +

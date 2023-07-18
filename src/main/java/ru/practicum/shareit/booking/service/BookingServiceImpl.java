@@ -126,39 +126,43 @@ public class BookingServiceImpl implements BookingService {
         List<Booking> resultList;
         switch (state) {
             case WAITING:
-                resultList = bookingRepository.getBookingsByUserItemsWithState(
+                resultList = bookingRepository.findBookingsByItemOwnerIdAndStatus(
                         userId,
                         BookingStatus.WAITING,
                         Sort.by(Sort.Direction.DESC, "start")
                 );
                 break;
             case REJECTED:
-                resultList = bookingRepository.getBookingsByUserItemsWithState(
+                resultList = bookingRepository.findBookingsByItemOwnerIdAndStatus(
                         userId,
                         BookingStatus.REJECTED,
                         Sort.by(Sort.Direction.DESC, "start")
                 );
                 break;
             case CURRENT:
-                resultList = bookingRepository.getBookingsByOwnerIdCurrent(
+                resultList = bookingRepository.findBookingsByItemOwnerIdAndStartBeforeAndEndAfter(
                         userId,
-                        Sort.by(Sort.Direction.DESC, "start")
+                        Sort.by(Sort.Direction.DESC, "start"),
+                        LocalDateTime.now(),
+                        LocalDateTime.now()
                 );
                 break;
             case PAST:
-                resultList = bookingRepository.getBookingsByOwnerIdPast(
+                resultList = bookingRepository.findBookingsByItemOwnerIdAndEndBefore(
                         userId,
-                        Sort.by(Sort.Direction.DESC, "start")
+                        Sort.by(Sort.Direction.DESC, "start"),
+                        LocalDateTime.now()
                 );
                 break;
             case FUTURE:
-                resultList = bookingRepository.getBookingsByOwnerIdFuture(
+                resultList = bookingRepository.findBookingsByItemOwnerIdAndStartAfter(
                         userId,
-                        Sort.by(Sort.Direction.DESC, "start")
+                        Sort.by(Sort.Direction.DESC, "start"),
+                        LocalDateTime.now()
                 );
                 break;
             case ALL:
-                resultList = bookingRepository.getBookingsByOwnerId(
+                resultList = bookingRepository.findBookingsByItemOwnerId(
                         userId,
                         Sort.by(Sort.Direction.DESC, "start")
                 );

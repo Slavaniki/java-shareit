@@ -9,7 +9,10 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemMapper;
 import ru.practicum.shareit.user.model.User;
 
-public class BookingMapper {
+public final class BookingMapper {
+    private BookingMapper() {
+    }
+
     public static BookingDto toBookingDto(Booking booking) {
         return new BookingDto(
             booking.getId(),
