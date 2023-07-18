@@ -1,7 +1,5 @@
 package ru.practicum.shareit.item.service;
 
-import lombok.Data;
-import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.dto.BookingDtoWithBookerId;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
