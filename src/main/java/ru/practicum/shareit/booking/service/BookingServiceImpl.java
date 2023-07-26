@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,7 +66,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> getUserBookings(long userId, BookingState state) {
+    public List<BookingDto> getUserBookings(long userId, BookingState state, int from, int size) {
         userRepository.findById(userId).orElseThrow(() ->
                 new ResourceNotFoundException("Пользователя с id: " + userId + " не существует"));
         List<Booking> resultList;
@@ -74,14 +75,14 @@ public class BookingServiceImpl implements BookingService {
                 resultList = bookingRepository.findBookingsByBooker_IdAndStatus(
                         userId,
                         BookingStatus.WAITING,
-                        Sort.by(Sort.Direction.DESC, "start")
+                        PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "start"))
                 );
                 break;
             case REJECTED:
                 resultList = bookingRepository.findBookingsByBooker_IdAndStatus(
                         userId,
                         BookingStatus.REJECTED,
-                        Sort.by(Sort.Direction.DESC, "start")
+                        PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "start"))
                 );
                 break;
             case CURRENT:
@@ -95,20 +96,20 @@ public class BookingServiceImpl implements BookingService {
                 resultList = bookingRepository.findBookingsByBooker_IdAndEndIsBefore(
                         userId,
                         LocalDateTime.now(),
-                        Sort.by(Sort.Direction.DESC, "start")
+                        PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "start"))
                 );
                 break;
             case FUTURE:
                 resultList = bookingRepository.findBookingsByBooker_IdAndStartIsAfter(
                         userId,
                         LocalDateTime.now(),
-                        Sort.by(Sort.Direction.DESC, "start")
+                        PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "start"))
                 );
                 break;
             case ALL:
                 resultList = bookingRepository.findBookingsByBooker_Id(
                         userId,
-                        Sort.by(Sort.Direction.DESC, "start")
+                        PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "start"))
                 );
                 break;
             default:
@@ -120,7 +121,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> getOwnerBookings(long userId, BookingState state) {
+    public List<BookingDto> getOwnerBookings(long userId, BookingState state, int from, int size) {
         userRepository.findById(userId).orElseThrow(() ->
                 new ResourceNotFoundException("Пользователя с id: " + userId + " не существует"));
         List<Booking> resultList;
@@ -129,20 +130,20 @@ public class BookingServiceImpl implements BookingService {
                 resultList = bookingRepository.findBookingsByItemOwnerIdAndStatus(
                         userId,
                         BookingStatus.WAITING,
-                        Sort.by(Sort.Direction.DESC, "start")
+                        PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "start"))
                 );
                 break;
             case REJECTED:
                 resultList = bookingRepository.findBookingsByItemOwnerIdAndStatus(
                         userId,
                         BookingStatus.REJECTED,
-                        Sort.by(Sort.Direction.DESC, "start")
+                        PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "start"))
                 );
                 break;
             case CURRENT:
                 resultList = bookingRepository.findBookingsByItemOwnerIdAndStartBeforeAndEndAfter(
                         userId,
-                        Sort.by(Sort.Direction.DESC, "start"),
+                        PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "start")),
                         LocalDateTime.now(),
                         LocalDateTime.now()
                 );
@@ -150,21 +151,21 @@ public class BookingServiceImpl implements BookingService {
             case PAST:
                 resultList = bookingRepository.findBookingsByItemOwnerIdAndEndBefore(
                         userId,
-                        Sort.by(Sort.Direction.DESC, "start"),
+                        PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "start")),
                         LocalDateTime.now()
                 );
                 break;
             case FUTURE:
                 resultList = bookingRepository.findBookingsByItemOwnerIdAndStartAfter(
                         userId,
-                        Sort.by(Sort.Direction.DESC, "start"),
+                        PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "start")),
                         LocalDateTime.now()
                 );
                 break;
             case ALL:
                 resultList = bookingRepository.findBookingsByItemOwnerId(
                         userId,
-                        Sort.by(Sort.Direction.DESC, "start")
+                        PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "start"))
                 );
                 break;
             default:
