@@ -13,6 +13,7 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@EqualsAndHashCode
 public class UserDto {
     private Long id;
     @NotBlank(message = "Имя не может быть пустым", groups = {Create.class})

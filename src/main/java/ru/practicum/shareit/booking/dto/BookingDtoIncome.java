@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class BookingDtoIncome {
     @NotNull
     @FutureOrPresent

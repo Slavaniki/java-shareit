@@ -12,10 +12,5 @@ import java.util.Set;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findCommentsByItem_Id(Long id);
 
-    @Query(value = "SELECT * FROM comments " +
-            "WHERE item_id IN ?",
-            nativeQuery = true)
-    List<Comment> findCommentsByItemIdList(List<Long> itemIds);
-
     List<Comment> findCommentsByItem_IdIn(Set<Long> itemIds);
 }

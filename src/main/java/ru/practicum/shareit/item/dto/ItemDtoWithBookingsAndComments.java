@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@EqualsAndHashCode
 public class ItemDtoWithBookingsAndComments {
     private Long id;
     @NotBlank(groups = {Create.class}, message = "Имя не может быть пустым.")

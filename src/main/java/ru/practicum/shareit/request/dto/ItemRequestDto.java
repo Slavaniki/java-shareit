@@ -12,8 +12,10 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class ItemRequestDto {
-    private long id;
+    private Long id;
     @Size(max = 200,
             message = "Описание не может быть длиннее 200 символов",
             groups = {Create.class})
