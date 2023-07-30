@@ -35,25 +35,11 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     Optional<Booking> getPastOrCurrentBookingByItemId(long id);
 
     @Query(value = "SELECT * FROM bookings " +
-            "WHERE item_id IN ? AND start_date < now() " +
-            "ORDER BY end_date DESC " +
-            "LIMIT 1",
-            nativeQuery = true)
-    List<Optional<Booking>> getPastOrCurrentBookingByItemIdIn(Set<Long> itemIds);
-
-    @Query(value = "SELECT * FROM bookings " +
             "WHERE item_id = ? AND start_date > now() AND status <> 'REJECTED' " +
             "ORDER BY start_date " +
             "LIMIT 1",
             nativeQuery = true)
     Optional<Booking> getFutureBookingByItemId(long id);
-
-    @Query(value = "SELECT * FROM bookings " +
-            "WHERE item_id IN ? AND start_date > now() " +
-            "ORDER BY start_date " +
-            "LIMIT 1",
-            nativeQuery = true)
-    List<Optional<Booking>> getFutureBookingByItemIdList(Set<Long> itemIds);
 
     List<Booking> findBookingsByBooker_Id(long id, Pageable pageable);
 
