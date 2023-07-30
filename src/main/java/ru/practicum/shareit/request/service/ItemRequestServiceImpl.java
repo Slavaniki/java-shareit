@@ -90,7 +90,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     private List<ItemForRequestsDto> getItemsByRequestId(Long requestId, List<Item> items) {
         List<Item> itemsToDto = items
                 .stream()
-                .filter(item -> item.getRequest().getId() == requestId)
+                .filter(item -> item.getRequest().getId().equals(requestId))
                 .collect(Collectors.toList());
         return ItemMapper.toItemForRequestsDtoList(itemsToDto);
     }
