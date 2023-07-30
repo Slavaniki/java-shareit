@@ -180,7 +180,7 @@ public class ItemServiceImplTest {
     }
 
     @Test
-    void GetItemDtoWithBookingsAndComments_UserIsOwnerTest() {
+    void getItemDtoWithBookingsAndComments_UserIsOwnerTest() {
         ItemDtoWithBookingsAndComments expected = new ItemDtoWithBookingsAndComments(
                 item.getId(),
                 item.getName(),
@@ -226,7 +226,7 @@ public class ItemServiceImplTest {
     }
 
     @Test
-    void GetItemDtoWithBookingsAndComments_UserIsNotOwnerTest() {
+    void getItemDtoWithBookingsAndComments_UserIsNotOwnerTest() {
         ItemDtoWithBookingsAndComments expected = new ItemDtoWithBookingsAndComments(
                 item.getId(),
                 item.getName(),
@@ -311,7 +311,7 @@ public class ItemServiceImplTest {
     }
 
     @Test
-    void UpdateItemById_withNullsTest() {
+    void updateItemById_withNullsTest() {
         Item knife = new Item(5L,
                 "нож",
                 "острый",

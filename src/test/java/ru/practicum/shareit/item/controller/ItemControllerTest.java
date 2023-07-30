@@ -89,7 +89,7 @@ public class ItemControllerTest {
     private MockMvc mvc;
 
     @Test
-    void CreateItemTest() throws Exception {
+    void createItemTest() throws Exception {
         Mockito
                 .when(itemService.createItem(anyLong(), any()))
                 .thenReturn(item);

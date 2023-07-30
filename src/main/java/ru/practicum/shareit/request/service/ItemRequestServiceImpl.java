@@ -28,6 +28,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     private final ItemRequestRepository requestRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+
     @Override
     public List<ItemRequestWithItemsDto> getAllItemsRequestsByUser(Long userId) {
         if (userRepository.findById(userId).isEmpty()) {
