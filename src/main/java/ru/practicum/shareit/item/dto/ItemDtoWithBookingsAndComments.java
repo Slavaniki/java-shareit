@@ -11,12 +11,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode
 public class ItemDtoWithBookingsAndComments {
     private Long id;
     @NotBlank(groups = {Create.class}, message = "Имя не может быть пустым.")

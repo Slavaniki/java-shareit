@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,44 +32,55 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = BookingController.class)
 class BookingControllerTest {
-    private final User kirchick = new User(1L, "9impulse", "coolFireBeaver@gmail.com");
-    private final User yan = new User(2L, "Yan", "Yan@gmail.com");
-    private final Item item = new Item(3L,
-            "mouse",
-            "cool",
-            true,
-            yan,
-            null
-    );
-    private final BookingDto waitingBooking = new BookingDto(
-            4L,
-            LocalDateTime.of(2023, 10, 20, 12, 30),
-            LocalDateTime.of(2023, 10, 21, 13, 35),
-            item,
-            kirchick,
-            BookingStatus.WAITING
-    );
-    private final BookingDto approvedBooking = new BookingDto(
-            waitingBooking.getId(),
-            waitingBooking.getStart(),
-            waitingBooking.getEnd(),
-            waitingBooking.getItem(),
-            waitingBooking.getBooker(),
-            BookingStatus.APPROVED
-    );
-    private final BookingDtoIncome bookingDtoIncome = new BookingDtoIncome(
-            waitingBooking.getStart(),
-            waitingBooking.getEnd(),
-            waitingBooking.getBooker().getId()
-    );
+    User kirchick;
+    User yan;
+    Item item;
+    BookingDto waitingBooking;
+    BookingDto approvedBooking;
+    BookingDtoIncome bookingDtoIncome;
     private final String startDate = "2023-10-20T12:30:00";
     private final String endDate = "2023-10-21T13:35:00";
+
     @Autowired
     private ObjectMapper mapper;
     @MockBean
     private BookingService bookingService;
     @Autowired
     private MockMvc mvc;
+
+    @BeforeEach
+    void beforeEach() {
+        kirchick = new User(1L, "9impulse", "coolFireBeaver@gmail.com");
+        yan = new User(2L, "Yan", "Yan@gmail.com");
+        item = new Item(3L,
+                "mouse",
+                "cool",
+                true,
+                yan,
+                null
+        );
+        waitingBooking = new BookingDto(
+                4L,
+                LocalDateTime.of(2023, 10, 20, 12, 30),
+                LocalDateTime.of(2023, 10, 21, 13, 35),
+                item,
+                kirchick,
+                BookingStatus.WAITING
+        );
+        approvedBooking = new BookingDto(
+                waitingBooking.getId(),
+                waitingBooking.getStart(),
+                waitingBooking.getEnd(),
+                waitingBooking.getItem(),
+                waitingBooking.getBooker(),
+                BookingStatus.APPROVED
+        );
+        bookingDtoIncome = new BookingDtoIncome(
+                waitingBooking.getStart(),
+                waitingBooking.getEnd(),
+                waitingBooking.getBooker().getId()
+        );
+    }
 
     @Test
     void createBookingTest() throws Exception {

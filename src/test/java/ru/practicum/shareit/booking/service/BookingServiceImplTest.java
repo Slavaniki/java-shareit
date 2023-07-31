@@ -127,20 +127,6 @@ class BookingServiceImplTest {
         assertThrows(ResourceNotFoundException.class, () -> bookService.getBookingById(1000L, 7L));
     }
 
-    /*@Test
-    @SqlGroup({
-            @Sql(value = {"booking-service-test-before-with-one-booking.sql"}, executionPhase = BEFORE_TEST_METHOD)
-    })
-    void handleGetBooking_withUserIsBooker() {
-        BookingDto result = bookService.getBookingById(1L, 7L);
-        assertThat(result).isNotNull();
-        assertEquals(7L, result.getId());
-        assertEquals(LocalDateTime.of(2022, 10, 25, 12, 30), result.getStart());
-        assertEquals(LocalDateTime.of(2022, 10, 30, 13, 35), result.getEnd());
-        assertEquals(3L, result.getItem().getId());
-        assertEquals(1L, result.getBooker().getId());
-    }*/
-
     @Test
     @SqlGroup({
             @Sql(value = {"booking-service-test-before-without-booking.sql"}, executionPhase = BEFORE_TEST_METHOD)

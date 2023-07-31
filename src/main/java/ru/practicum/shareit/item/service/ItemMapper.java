@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.service;
 
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingDtoWithBookerId;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -13,9 +14,8 @@ import ru.practicum.shareit.user.service.UserMapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class ItemMapper {
-    private ItemMapper() {
-    }
+@NoArgsConstructor
+public final class  ItemMapper {
 
     public static ItemDto itemToDto(Item item) {
         return new ItemDto(
