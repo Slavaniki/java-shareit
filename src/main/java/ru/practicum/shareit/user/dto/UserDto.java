@@ -8,11 +8,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class UserDto {
     private Long id;
     @NotBlank(message = "Имя не может быть пустым", groups = {Create.class})

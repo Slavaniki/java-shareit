@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Table(name = "requests")
 @Entity
+@ToString
+@EqualsAndHashCode
 public class ItemRequest {
     @Id
     @Column(name = "request_id")

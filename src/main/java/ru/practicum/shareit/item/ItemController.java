@@ -12,12 +12,15 @@ import ru.practicum.shareit.item.dto.ItemDtoWithBookingsAndComments;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class ItemController {
     private final ItemService itemService;
     private static final String USER_ID_HEADER = "X-Sharer-User-Id";
@@ -45,9 +48,11 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDtoWithBookingsAndComments> getAllItemsByUser(@RequestHeader(USER_ID_HEADER) Long userId) {
+    public List<ItemDtoWithBookingsAndComments> getAllItemsByUser(@RequestHeader(USER_ID_HEADER) Long userId,
+                                                                  @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+                                                                  @RequestParam(defaultValue = "100") @Positive int size) {
         log.info("Запрос на получение всех вещей пользователя с id " + userId);
-        return itemService.getAllItemsOfUser(userId);
+        return itemService.getAllItemsOfUser(userId, from, size);
     }
 
     @PatchMapping("/{itemId}")
@@ -68,8 +73,10 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDto> searchItems(@RequestParam String text) {
+    public List<ItemDto> searchItems(@RequestParam String text,
+                                     @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+                                     @RequestParam(defaultValue = "100") @Positive int size) {
         log.info("Поиск вещей по запросу: \"" + text + "\"");
-        return itemService.getAllItemsBySearch(text);
+        return itemService.getAllItemsBySearch(text, from, size);
     }
 }
