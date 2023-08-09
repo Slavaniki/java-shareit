@@ -87,7 +87,6 @@ public class ItemServiceImpl implements ItemService {
         List<CommentDto> comments = commentRepository.findCommentsByItem_Id(item.getId())
                 .stream().map(CommentMapper::toCommentDto)
                 .collect(Collectors.toList());
-
         return ItemMapper.toItemDtoWithBookingsAndComments(
                 item,
                 comments,

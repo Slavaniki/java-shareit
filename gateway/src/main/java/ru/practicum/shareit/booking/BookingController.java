@@ -2,47 +2,74 @@ package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.booking.dto.BookItemRequestDto;
+import ru.practicum.shareit.booking.dto.BookingDtoIncome;
 import ru.practicum.shareit.booking.dto.BookingState;
+import ru.practicum.shareit.exception.NotAvailableException;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
-@Controller
+@Slf4j
+@RestController
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
-@Slf4j
 @Validated
 public class BookingController {
-	private final BookingClient bookingClient;
+    private final BookingClient bookingClient;
+    private static final String USER_ID_HEADER = "X-Sharer-User-Id";
 
-	@GetMapping
-	public ResponseEntity<Object> getBookings(@RequestHeader("X-Sharer-User-Id") long userId,
-			@RequestParam(name = "state", defaultValue = "all") String stateParam,
-			@PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
-			@Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
-		BookingState state = BookingState.from(stateParam)
-				.orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
-		log.info("Get booking with state {}, userId={}, from={}, size={}", stateParam, userId, from, size);
-		return bookingClient.getBookings(userId, state, from, size);
-	}
+    @PostMapping
+    public ResponseEntity<Object> create(@RequestHeader(USER_ID_HEADER) long id,
+                                         @Valid @RequestBody BookingDtoIncome bookingDtoIncome) {
+        validateStartEndOfBooking(bookingDtoIncome);
+        log.info("Запрос на добавление бронирования " + bookingDtoIncome + " от пользователя с id " + id);
+        return bookingClient.createItem(id, bookingDtoIncome);
+    }
 
-	@PostMapping
-	public ResponseEntity<Object> bookItem(@RequestHeader("X-Sharer-User-Id") long userId,
-			@RequestBody @Valid BookItemRequestDto requestDto) {
-		log.info("Creating booking {}, userId={}", requestDto, userId);
-		return bookingClient.bookItem(userId, requestDto);
-	}
+    @PatchMapping("/{bookingId}")
+    public ResponseEntity<Object> updateStatus(@RequestHeader(USER_ID_HEADER) long id,
+                                            @PathVariable long bookingId,
+                                            @RequestParam boolean approved) {
+        log.info("Запрос на смену статуса: " + approved + " от пользователя с id " + id + " для бронирования с id " + bookingId);
+        return bookingClient.updateStatus(id, bookingId, approved);
+    }
 
-	@GetMapping("/{bookingId}")
-	public ResponseEntity<Object> getBooking(@RequestHeader("X-Sharer-User-Id") long userId,
-			@PathVariable Long bookingId) {
-		log.info("Get booking {}, userId={}", bookingId, userId);
-		return bookingClient.getBooking(userId, bookingId);
-	}}
+    @GetMapping("/{bookingId}")
+    public ResponseEntity<Object> getById(@RequestHeader(USER_ID_HEADER) long id,
+                                 @PathVariable long bookingId) {
+        return bookingClient.getById(id, bookingId);
+    }
+
+    @GetMapping
+    public ResponseEntity<Object> getUserBookings(
+            @RequestHeader(USER_ID_HEADER) long id,
+            @RequestParam(name = "state", defaultValue = "ALL") String stateParam,
+            @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+            @RequestParam(defaultValue = "100") @Positive int size) {
+        BookingState state = BookingState.from(stateParam)
+                .orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
+        return bookingClient.getUserBookings(id, state, from, size);
+    }
+
+    @GetMapping("/owner")
+    public ResponseEntity<Object> getOwnerBookings(
+            @RequestHeader(USER_ID_HEADER) long id,
+            @RequestParam(name = "state", defaultValue = "ALL") String stateParam,
+            @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+            @RequestParam(defaultValue = "100") @Positive int size) {
+        BookingState state = BookingState.from(stateParam)
+                .orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
+        return bookingClient.getOwnerBookings(id, state, from, size);
+    }
+
+    private void validateStartEndOfBooking(BookingDtoIncome bookingDtoIncome) {
+        if (bookingDtoIncome.getStart().isAfter(bookingDtoIncome.getEnd())
+                || bookingDtoIncome.getStart().isEqual(bookingDtoIncome.getEnd())) {
+            throw new IllegalArgumentException("Начало бронирование не может быть равно или позже окончания бронирования");
+        }
+    }
+}

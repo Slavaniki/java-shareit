@@ -9,9 +9,6 @@ import ru.practicum.shareit.booking.dto.BookingDtoIncome;
 import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.booking.service.BookingService;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Slf4j
@@ -25,7 +22,7 @@ public class BookingController {
 
     @PostMapping
     public BookingDto create(@RequestHeader(USER_ID_HEADER) long id,
-                                 @Valid @RequestBody BookingDtoIncome bookingDtoIncome) {
+                             @RequestBody BookingDtoIncome bookingDtoIncome) {
         log.info("Запрос на добавление бронирования " + bookingDtoIncome + " от пользователя с id " + id);
         return bookingService.createBooking(id, bookingDtoIncome);
     }
@@ -48,8 +45,8 @@ public class BookingController {
     public List<BookingDto> getUserBookings(
             @RequestHeader(USER_ID_HEADER) long id,
             @RequestParam(required = false, defaultValue = "ALL") BookingState state,
-            @RequestParam(defaultValue = "0") @PositiveOrZero int from,
-            @RequestParam(defaultValue = "100") @Positive int size) {
+            @RequestParam(defaultValue = "0") int from,
+            @RequestParam(defaultValue = "100") int size) {
         return bookingService.getUserBookings(id, state, from, size);
     }
 
@@ -57,8 +54,8 @@ public class BookingController {
     public List<BookingDto> getOwnerBookings(
             @RequestHeader(USER_ID_HEADER) long id,
             @RequestParam(required = false, defaultValue = "ALL") BookingState state,
-            @RequestParam(defaultValue = "0") @PositiveOrZero int from,
-            @RequestParam(defaultValue = "100") @Positive int size) {
+            @RequestParam(defaultValue = "0") int from,
+            @RequestParam(defaultValue = "100") int size) {
         return bookingService.getOwnerBookings(id, state, from, size);
     }
 }

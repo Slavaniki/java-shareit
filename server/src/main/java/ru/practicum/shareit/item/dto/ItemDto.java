@@ -1,8 +1,6 @@
 package ru.practicum.shareit.item.dto;
 
 import lombok.*;
-import ru.practicum.shareit.Create;
-import ru.practicum.shareit.Update;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import javax.validation.constraints.NotBlank;
@@ -14,14 +12,13 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class ItemDto {
     private Long id;
-    @NotBlank(groups = {Create.class}, message = "Имя не может быть пустым.")
+    @NotBlank(message = "Имя не может быть пустым.")
     private String name;
-    @NotBlank(groups = {Create.class})
+    @NotBlank
     @Size(max = 200,
-            message = "Описание не может быть более 200 символов.",
-            groups = {Create.class, Update.class})
+            message = "Описание не может быть более 200 символов.")
     private String description;
-    @NotNull(groups = {Create.class})
+    @NotNull
     private Boolean available;
     private UserDto owner;
     private Long requestId;

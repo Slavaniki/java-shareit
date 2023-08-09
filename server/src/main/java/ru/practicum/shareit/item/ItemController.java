@@ -4,16 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.Create;
-import ru.practicum.shareit.Update;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoWithBookingsAndComments;
 import ru.practicum.shareit.item.service.ItemService;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -27,7 +22,7 @@ public class ItemController {
 
     @PostMapping
     public ItemDto createItem(@RequestHeader(USER_ID_HEADER) Long userId,
-                       @Validated({Create.class}) @RequestBody ItemDto itemDto) {
+                              @RequestBody ItemDto itemDto) {
         log.info("Запрос на добавление вещи " + itemDto + " от пользователя с id " + userId);
         return itemService.createItem(userId, itemDto);
     }
@@ -35,22 +30,22 @@ public class ItemController {
     @PostMapping("/{itemId}/comment")
     public CommentDto addComment(@RequestHeader(USER_ID_HEADER) Long userId,
                                  @PathVariable Long itemId,
-                                 @Valid @RequestBody CommentDto commentDto) {
+                                 @RequestBody CommentDto commentDto) {
         log.info("Запрос на добавление отзыва от пользователя с id " + userId + " на вещь с id " + itemId);
         return itemService.createComment(userId, itemId, commentDto);
     }
 
     @GetMapping("/{itemId}")
     public ItemDtoWithBookingsAndComments getItem(@RequestHeader(USER_ID_HEADER) Long id,
-            @PathVariable Long itemId) {
+                                                  @PathVariable Long itemId) {
         log.info("Запрос на получение вещи с id " + itemId);
         return itemService.getItemDtoWithBookingsAndComments(id, itemId);
     }
 
     @GetMapping
     public List<ItemDtoWithBookingsAndComments> getAllItemsByUser(@RequestHeader(USER_ID_HEADER) Long userId,
-                                                                  @RequestParam(defaultValue = "0") @PositiveOrZero int from,
-                                                                  @RequestParam(defaultValue = "100") @Positive int size) {
+                                                                  @RequestParam(defaultValue = "0") int from,
+                                                                  @RequestParam(defaultValue = "100") int size) {
         log.info("Запрос на получение всех вещей пользователя с id " + userId);
         return itemService.getAllItemsOfUser(userId, from, size);
     }
@@ -59,7 +54,7 @@ public class ItemController {
     public ItemDto updateItem(
             @RequestHeader(USER_ID_HEADER) Long ownerId,
             @PathVariable Long itemId,
-            @Validated({Update.class}) @RequestBody ItemDto itemDto) {
+            @RequestBody ItemDto itemDto) {
         log.info("Запрос на обновление вещи с id " + itemId + " от пользователя с id " + ownerId);
         return itemService.updateItemById(ownerId, itemId, itemDto);
     }
@@ -74,8 +69,8 @@ public class ItemController {
 
     @GetMapping("/search")
     public List<ItemDto> searchItems(@RequestParam String text,
-                                     @RequestParam(defaultValue = "0") @PositiveOrZero int from,
-                                     @RequestParam(defaultValue = "100") @Positive int size) {
+                                     @RequestParam(defaultValue = "0") int from,
+                                     @RequestParam(defaultValue = "100") int size) {
         log.info("Поиск вещей по запросу: \"" + text + "\"");
         return itemService.getAllItemsBySearch(text, from, size);
     }

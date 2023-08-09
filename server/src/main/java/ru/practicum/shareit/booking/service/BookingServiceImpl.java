@@ -34,7 +34,6 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public BookingDto createBooking(long userId, BookingDtoIncome bookingDtoIncome) {
-        validateStartEndOfBooking(bookingDtoIncome);
         final User booker = userRepository.findById(userId).orElseThrow(() ->
                 new ResourceNotFoundException("Пользователя с id: " + userId + " не существует"));
         Item bookingItem = itemRepository.findById(bookingDtoIncome.getItemId()).orElseThrow(() ->
@@ -48,7 +47,6 @@ public class BookingServiceImpl implements BookingService {
         final Booking savedBooking = bookingRepository.save(BookingMapper
                 .toBooking(bookingDtoIncome, bookingItem, booker));
         log.info("Бронирование успешно создано");
-
         return BookingMapper.toBookingDto(savedBooking);
     }
 
@@ -196,12 +194,5 @@ public class BookingServiceImpl implements BookingService {
         booking.setStatus(status);
         Booking newBooking = bookingRepository.save(booking);
         return BookingMapper.toBookingDto(newBooking);
-    }
-
-    private void validateStartEndOfBooking(BookingDtoIncome bookingDtoIncome) {
-        if (bookingDtoIncome.getStart().isAfter(bookingDtoIncome.getEnd())
-                || bookingDtoIncome.getStart().isEqual(bookingDtoIncome.getEnd())) {
-            throw new IllegalArgumentException("Начало бронирование не может быть равно или позже окончания бронирования");
-        }
     }
 }

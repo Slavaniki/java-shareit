@@ -4,13 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.Create;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestWithItemsDto;
 import ru.practicum.shareit.request.service.ItemRequestService;
 
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -24,7 +21,7 @@ public class ItemRequestController {
 
     @PostMapping
     public ItemRequestDto createItemRequest(@RequestHeader(USER_ID_HEADER) Long userId,
-                              @Validated({Create.class}) @RequestBody ItemRequestDto itemRequestDto) {
+                                            @RequestBody ItemRequestDto itemRequestDto) {
         log.info("Запрос на добавление запроса " + itemRequestDto + " от пользователя с id " + userId);
         return itemRequestService.createItemRequest(userId, itemRequestDto);
     }
@@ -44,8 +41,8 @@ public class ItemRequestController {
 
     @GetMapping("/all")
     public List<ItemRequestWithItemsDto> getAllOtherItemRequests(@RequestHeader(USER_ID_HEADER) Long userId,
-                                                                 @RequestParam(required = false, defaultValue = "0") @PositiveOrZero int from,
-                                                                 @RequestParam(required = false, defaultValue = "10") @Positive int size) {
+                                                                 @RequestParam(required = false, defaultValue = "0") int from,
+                                                                 @RequestParam(required = false, defaultValue = "10") int size) {
         log.info("Запрос на получение всех запросов,созданных другими пользователями, от пользователя с id " + userId);
         return itemRequestService.getAllOtherItemRequests(userId, from, size);
     }
