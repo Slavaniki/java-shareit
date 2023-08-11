@@ -15,11 +15,4 @@ public class ErrorHandler {
         log.error("400 {}", e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }
-
-/*    @ExceptionHandler({NotAvailableException.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleMethodArgumentMismatchCase(MethodArgumentTypeMismatchException e) {
-        log.error("400 {}", e.getMessage(), e);
-        return new ErrorResponse("Unknown state: UNSUPPORTED_STATUS");
-    }*/
 }

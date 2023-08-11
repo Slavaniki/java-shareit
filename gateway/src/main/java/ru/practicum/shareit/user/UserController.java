@@ -16,7 +16,7 @@ import ru.practicum.shareit.user.dto.UserDto;
 public class UserController {
     private final UserClient userClient;
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Object> createUser(@Validated(Create.class) @RequestBody UserDto userDto) {
         log.info("Запрос на добавление пользователя " + userDto);
         return userClient.createUser(userDto);
